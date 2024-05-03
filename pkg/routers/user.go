@@ -13,10 +13,11 @@ func Init() {
 	if global.Eng != nil {
 		group := global.Eng.Group("/v1/user").Use(middleware.DefaultLogger())
 		user := handlers.NewUser()
-		group.POST("/:id", user.Reg)
+		group.POST("/", user.Reg)
 		group.GET("/:id", user.GetUser)
 		group.PUT("/:id", user.Modify)
 		group.DELETE("/:id", user.Delete)
+		group.GET("/", user.All)
 	} else {
 		klog.Infoln("eng is nil")
 	}

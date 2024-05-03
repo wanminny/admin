@@ -29,9 +29,18 @@ func (u *User) GetUser(c *gin.Context) {
 	id := c.Param("id")
 	klog.Infoln(id, u.Db)
 	user := model.User{}
-	u.Db.First(&user)
+	u.Db.First(&user, "id = ?", id)
 	klog.Infoln(user)
 	r.Data = user
+	util.SetSuccess(c, r)
+}
+
+func (u *User) All(c *gin.Context) {
+	r := util.NewResponse()
+	users := []model.User{}
+	//var users []model.User
+	u.Db.Find(&users)
+	r.Data = users
 	util.SetSuccess(c, r)
 }
 
