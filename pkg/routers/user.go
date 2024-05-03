@@ -14,6 +14,8 @@ func init() {
 		user := handlers.NewUser()
 		group.POST("/:id", user.Reg)
 		group.GET("/:id", user.GetUser)
+		group.PUT("/:id", user.Modify)
+		group.DELETE("/:id", user.Delete)
 	} else {
 		klog.Infoln("eng is nil")
 	}
