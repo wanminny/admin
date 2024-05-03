@@ -14,10 +14,10 @@ func Init() {
 		group := global.Eng.Group("/v1/user").Use(middleware.DefaultLogger())
 		user := handlers.NewUser()
 		group.POST("/", user.Reg)
-		group.GET("/:id", user.GetUser)
-		group.PUT("/:id", user.Modify)
-		group.DELETE("/:id", user.Delete)
-		group.GET("/", user.All)
+		group.GET("/:id", user.Login)
+		group.PUT("/:id", user.Modify).Use(middleware.JWTAuthMiddleware())
+		group.DELETE("/:id", user.Delete).Use(middleware.JWTAuthMiddleware())
+		group.GET("/", user.All).Use(middleware.JWTAuthMiddleware())
 	} else {
 		klog.Infoln("eng is nil")
 	}

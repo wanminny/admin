@@ -2,11 +2,12 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/pkg/errors"
 	"github.com/wanminny/admin/pkg/global"
+	"github.com/wanminny/admin/pkg/middleware"
 	"github.com/wanminny/admin/pkg/model"
 	"github.com/wanminny/admin/pkg/util"
 	"gorm.io/gorm"
-	"k8s.io/klog/v2"
 )
 
 type User struct {
@@ -24,14 +25,26 @@ type ReqUser struct {
 	Passwd string `form:"passwd" json:"passwd" binding:"required,min=3,max=10"`
 }
 
-func (u *User) GetUser(c *gin.Context) {
+func (u *User) Login(c *gin.Context) {
 	r := util.NewResponse()
-	id := c.Param("id")
-	klog.Infoln(id, u.Db)
+	var req ReqUser
+	err := c.BindJSON(&req)
+	if err != nil {
+		util.SetFailed(c, r, err)
+		return
+	}
 	user := model.User{}
-	u.Db.First(&user, "id = ?", id)
-	klog.Infoln(user)
-	r.Data = user
+	result := u.Db.Where("name = ?", req.Name).Where("passwd = ?", req.Passwd).First(&user)
+	if result.RowsAffected == 0 {
+		util.SetFailed(c, r, errors.New("用户名或密码错误"))
+		return
+	}
+	token, err := middleware.GenToken(req.Name)
+	if err != nil {
+		util.SetFailed(c, r, err)
+		return
+	}
+	r.Data = token
 	util.SetSuccess(c, r)
 }
 
