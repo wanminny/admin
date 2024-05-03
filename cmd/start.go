@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/wanminny/admin/pkg/global"
+	_ "github.com/wanminny/admin/pkg/routers"
 	"k8s.io/klog/v2"
 )
 
@@ -16,10 +17,11 @@ var startCmd = &cobra.Command{
 	Long:  `This will start the application using the provided configuration file`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// 从配置文件中读取设置
-		config := viper.Get("yourConfigSection")
-		fmt.Printf("Starting the application with config: %+v\n", config)
-		gin.SetMode(gin.ReleaseMode)
+		//global.Init()
+		//r := gin.Default()
+		port := viper.GetString("http.port")
+		fmt.Printf("Starting the application with config: %+v\n", port)
 		klog.Infoln(gin.Mode())
-		global.Eng.Run(":8090")
+		global.Eng.Run(port)
 	},
 }
