@@ -13,3 +13,7 @@ type User struct {
 	isOn     bool   `json:"is_on"`
 	Avatar   string `json:"avatar"`
 }
+
+//func (u *User) TableName() string {
+//	return "zxw_user"
+//}
