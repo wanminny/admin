@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/wanminny/admin/pkg/global"
+	"github.com/wanminny/admin/pkg/model"
 	"github.com/wanminny/admin/pkg/util"
 )
 
@@ -30,17 +32,21 @@ func (u *User) GetUser(c *gin.Context) {
 }
 
 func (u *User) Reg(c *gin.Context) {
-	id := c.Param("id")
-	userId := c.Query("userId")
-	age := c.DefaultQuery("age", "0") // 如果找不到age参数，则使用默认值0
-	name := c.PostForm("name")
-	c.JSON(200, gin.H{
-		"message": "pong",
-		"id":      id,
-		"userId":  userId,
-		"age":     age,
-		"name":    name,
-	})
+	r := util.NewResponse()
+	var req ReqUser
+	err := c.BindJSON(&req)
+	if err != nil {
+		util.SetFailed(c, r, err)
+		return
+	}
+	db := global.Db
+	user := model.User{
+		Name:   req.Name,
+		Passwd: req.Passwd,
+	}
+	db.Create(&user)
+	r.Data = req
+	util.SetSuccess(c, r)
 }
 
 func (u *User) Modify(c *gin.Context) {

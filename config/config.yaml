@@ -38,5 +38,20 @@ canal:
   destination: example
   timeout: 5s
   serverId: 1840349752
+db:
+  Debug: true
+  DBType: mysql # sqlite3/mysql/postgres
+  # SQLite3 DSN
+#  DSN = "data/ginadmin.db"
+  # MySQL DSN
+  DSN: "root:123456@tcp(127.0.0.1:3306)/admin?charset=utf8mb4&parseTime=True&loc=Local"
+  # PostgreSQL DSN
+  # DSN = "host=db user=postgres password=123456 dbname=ginadmin port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+  MaxLifetime: 86400
+  MaxIdleTime: 3600
+  MaxOpenConns: 100
+  MaxIdleConns: 50
+  TablePrefix: ""
+  AutoMigrate: true
 
 
