@@ -7,8 +7,9 @@ import (
 	"k8s.io/klog/v2"
 )
 
-func init() {
+func Init() {
 	global.Init()
+	global.LoadOrm()
 	if global.Eng != nil {
 		group := global.Eng.Group("/v1/user").Use(middleware.DefaultLogger())
 		user := handlers.NewUser()

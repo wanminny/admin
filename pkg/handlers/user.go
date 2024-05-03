@@ -5,13 +5,18 @@ import (
 	"github.com/wanminny/admin/pkg/global"
 	"github.com/wanminny/admin/pkg/model"
 	"github.com/wanminny/admin/pkg/util"
+	"gorm.io/gorm"
+	"k8s.io/klog/v2"
 )
 
 type User struct {
+	Db *gorm.DB
 }
 
 func NewUser() *User {
-	return &User{}
+	return &User{
+		Db: global.Db,
+	}
 }
 
 type ReqUser struct {
@@ -20,15 +25,14 @@ type ReqUser struct {
 }
 
 func (u *User) GetUser(c *gin.Context) {
+	r := util.NewResponse()
 	id := c.Param("id")
-	userId := c.Query("userId")
-	age := c.DefaultQuery("age", "0") // 如果找不到age参数，则使用默认值0
-	c.JSON(200, gin.H{
-		"message": "pong",
-		"id":      id,
-		"userId":  userId,
-		"age":     age,
-	})
+	klog.Infoln(id, u.Db)
+	user := model.User{}
+	u.Db.First(&user)
+	klog.Infoln(user)
+	r.Data = user
+	util.SetSuccess(c, r)
 }
 
 func (u *User) Reg(c *gin.Context) {
