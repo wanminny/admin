@@ -1,0 +1,42 @@
+http:
+  port: 8090
+  debug: true
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  database: test
+  username: root
+  password: 123456
+  maxIdleConns: 10
+  maxOpenConns: 100
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: 123456
+  db: 0
+  maxIdleConns: 10
+  maxActiveConns: 100
+  idleTimeout: 60s
+kafka:
+  brokers:
+    - 127.0.0.1:9092
+  topic: test
+  group: test
+  maxBytes: 10000000
+  maxWait: 1s
+es:
+  host: 127.0.0.1:9200
+  index: test
+  charset: utf-8
+  maxIdleConns: 10
+  maxOpenConns: 100
+canal:
+  host: 127.0.0.1
+  port: 1111
+  username: canal
+  password: canal
+  destination: example
+  timeout: 5s
+  serverId: 1840349752
+
+
