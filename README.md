@@ -2,5 +2,10 @@
 
 ### 1. 编译
 ```javascript
-    go generate 
+    go generate
+
+    ./admin -h
+
+    ./admin start
+
 ```

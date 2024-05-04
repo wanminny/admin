@@ -11,13 +11,16 @@ func Init() {
 	global.Init()
 	global.LoadOrm()
 	if global.Eng != nil {
-		group := global.Eng.Group("/v1/user").Use(middleware.DefaultLogger())
+		rbac := middleware.RbacHandler()
+		jwt := middleware.JWTAuthMiddleware()
+		logger := middleware.DefaultLogger()
+		group := global.Eng.Group("/v1/user").Use(rbac)
 		user := handlers.NewUser()
 		group.POST("/", user.Reg)
-		group.GET("/:id", user.Login)
+		group.GET("/:id", user.Login).Use(logger)
 		group.PUT("/:id", user.Modify).Use(middleware.JWTAuthMiddleware())
 		group.DELETE("/:id", user.Delete).Use(middleware.JWTAuthMiddleware())
-		group.GET("/", user.All).Use(middleware.JWTAuthMiddleware())
+		group.GET("/all", user.All).Use(jwt)
 	} else {
 		klog.Infoln("eng is nil")
 	}
