@@ -26,6 +26,7 @@ func LoadOrm() *gorm.DB {
 			}
 			err = json.Unmarshal(b, &config)
 			Db, err = gormx.New(config)
+			klog.Infoln(config, Db)
 			klog.Infof("%+v", config)
 			if err != nil {
 				klog.Infoln(err.Error())

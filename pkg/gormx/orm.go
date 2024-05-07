@@ -44,6 +44,7 @@ func New(cfg Config) (*gorm.DB, error) {
 	switch strings.ToLower(cfg.DBType) {
 	case "mysql":
 		if err := createDatabaseWithMySQL(cfg.DSN); err != nil {
+			klog.Infoln(err.Error())
 			return nil, err
 		}
 		dialector = mysql.Open(cfg.DSN)
